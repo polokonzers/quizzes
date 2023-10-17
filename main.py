@@ -23,16 +23,6 @@ async def root(user_quiz_request: UserQuizRequest):
     async with aiohttp.ClientSession() as session:
         async with session.get(url, params=params) as responce:
             responce_json = await responce.json()
-            db_session = db_requests.Session()
-            for item in responce_json:
-                quiz_data = db_requests.QuizData(
-                    quiz_id=item['id'],
-                    question=item['question'],
-                    answer=item['answer'],
-                    created_at=item['created_at']
-                )
-                db_session.add(quiz_data)
-            db_session.commit()
-            db_session.close()
+            db_requests.add_to_db(responce_json)
             # Here we need to return to user a last question from DB
             return responce_json

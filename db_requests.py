@@ -10,7 +10,23 @@ Session = sessionmaker(bind=engine)
 class QuizData(Base):
     __tablename__ = 'quiz_data'
 
-    quiz_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
+    jservice_question_id = Column(Integer)
     question = Column(String)
     answer = Column(String)
     created_at = Column(DateTime)
+
+
+def add_to_db(responce_json):
+    '''Adding to database'''
+    session = Session()
+    for item in responce_json:
+        quiz_data = QuizData(
+            jservice_question_id=item['id'],
+            question=item['question'],
+            answer=item['answer'],
+            created_at=item['created_at']
+        )
+    session.add(quiz_data)
+    session.commit()
+    session.close()
