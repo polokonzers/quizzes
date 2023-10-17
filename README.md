@@ -2,11 +2,11 @@
 Веб-сервис, создающий загадки.
 Реализован на FastAPI+ SQLAlchemy + PostgreSQL.
 Запускается в docker-compose.
-Сохранность данных обеспечивается с помощью volume'ов.
+Сохранность данных обеспечивается с помощью volume'а.
 
 ### Инструкция по запуску:
-1. В папке с docker-compose.yml выполнить `docker-compose up -d`
-2. Найти контейнер с `db` с помощью команды `docker container ls`
+1. В директории с docker-compose.yml выполнить `docker-compose up -d`
+2. Найти контейнер с `quizzes-db` с помощью команды `docker container ls`
 3. Открыть терминал контейнера базы данных: `docker exec -it <container_id_or_name> bash`
 4. Войти в бд: `psql -U quiz_admin -d quiz`
 5. Создать таблицу:
