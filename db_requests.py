@@ -1,5 +1,5 @@
 import aiohttp
-from sqlalchemy import exists, create_engine, Column, Integer, String, DateTime
+from sqlalchemy import exists, create_engine, func, Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -50,6 +50,7 @@ async def unique_checker(responce_json, url):
 
 
 async def question_changer(url):
+    '''Changes question until found an unique one'''
     params = {'count': 1}
     async with aiohttp.ClientSession() as session:
         async with session.get(url, params=params) as response:
@@ -64,3 +65,19 @@ async def question_changer(url):
     if question_id_exists:
         return await question_changer(url)
     return new_response_json[0]
+
+
+def pull_question(response_json):
+    '''Pulls last question from DB before new were added'''
+    session = Session()
+    count_in_db = session.query(func.count(QuizData.id)).scalar()
+    session.close
+    internal_question_id = count_in_db - len(response_json)
+    if internal_question_id > 0:
+        previous_question = session.query(QuizData).filter_by(
+            id=internal_question_id
+        ).first()
+        session.close
+        return previous_question
+    else:
+        return {}

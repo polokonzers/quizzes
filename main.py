@@ -22,13 +22,14 @@ async def root(user_quiz_request: UserQuizRequest):
         'count': user_quiz_request.questions_num
     }
     responce_json = await jservice_request(url, params)
-    # Here we need to check unique id of question
     db_requests.add_to_db(responce_json)
-    # Here we need to return to user a last question from DB
-    return responce_json
+    previous_question = db_requests.pull_question(responce_json)
+    print(responce_json)
+    return previous_question
 
 
 async def jservice_request(url, params):
+    '''Request to jservice with changing not unique questions'''
     async with aiohttp.ClientSession() as session:
         async with session.get(url, params=params) as responce:
             responce_json = await responce.json()
