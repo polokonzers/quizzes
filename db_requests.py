@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
-engine = create_engine('postgresql://quiz_admin:1234@localhost/quiz')
+engine = create_engine('postgresql://quiz_admin:1234@db/quiz')
 Session = sessionmaker(bind=engine)
 
 
@@ -18,7 +18,7 @@ class QuizData(Base):
     created_at = Column(DateTime)
 
 
-def add_to_db(responce_json):
+def add_to_db(responce_json: list):
     '''Adding to database'''
     session = Session()
     for item in responce_json:
@@ -33,7 +33,7 @@ def add_to_db(responce_json):
         session.close()
 
 
-async def unique_checker(responce_json, url):
+async def unique_checker(responce_json: list, url: str):
     '''Check question_id existance'''
     unique_responce = []
     session = Session()
@@ -49,7 +49,7 @@ async def unique_checker(responce_json, url):
     return unique_responce
 
 
-async def question_changer(url):
+async def question_changer(url: str):
     '''Changes question until found an unique one'''
     params = {'count': 1}
     async with aiohttp.ClientSession() as session:
@@ -67,7 +67,7 @@ async def question_changer(url):
     return new_response_json[0]
 
 
-def pull_question(response_json):
+def pull_question(response_json: list):
     '''Pulls last question from DB before new were added'''
     session = Session()
     count_in_db = session.query(func.count(QuizData.id)).scalar()
