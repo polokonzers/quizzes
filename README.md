@@ -32,4 +32,5 @@ Request body (JSON format):
     "jservice_question_id": 128464,
     "answer": "<i>The Producers</i>"
 }
+
 **Обратите внимание: ответ на первый запрос придет пустым!**
