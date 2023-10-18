@@ -1,3 +1,6 @@
+"""Database requests logic
+"""
+
 import aiohttp
 from sqlalchemy import exists, create_engine, func, Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
@@ -50,7 +53,7 @@ async def unique_checker(responce_json: list, url: str):
 
 
 async def question_changer(url: str):
-    '''Changes question until found an unique one'''
+    '''Changes question until find an unique one'''
     params = {'count': 1}
     async with aiohttp.ClientSession() as session:
         async with session.get(url, params=params) as response:

@@ -1,3 +1,6 @@
+"""Handling of user requests and requests to jservice
+"""
+
 import aiohttp
 from fastapi import FastAPI
 from pydantic import BaseModel
